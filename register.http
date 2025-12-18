@@ -1,0 +1,44 @@
+### 1. Register User (POST /api/auth/register)
+POST http://127.0.0.1:3000/api/v1/auth/register
+Content-Type: application/json
+
+{
+    "name": "Fouad Said",
+    "email": "fouad@example.com",
+    "password": "mypassword123"
+}
+#######
+POST http://127.0.0.1:3000/api/v1/auth/login
+Content-Type: application/json
+
+{
+    "email": "fouad@example.com",
+    "password": "mypassword123"
+}
+###
+
+GET http://localhost:3000/api/v1/dashboard
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTQxNTJjY2I5ZGMzYTJmODEwMTIyOTkiLCJuYW1lIjoiRm91YWQgU2FpZCIsImlhdCI6MTc2NjAwMjkwMSwiZXhwIjoxNzY2NjA3NzAxfQ.NZHEy5OtMoN0WhmzFvJh9cxXoMVcERriGI2MLB6Edbo
+
+### Create a Task
+POST http://localhost:3000/api/v1/tasks
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTQxNTJjY2I5ZGMzYTJmODEwMTIyOTkiLCJuYW1lIjoiRm91YWQgU2FpZCIsImlhdCI6MTc2NjAwMjkwMSwiZXhwIjoxNzY2NjA3NzAxfQ.NZHEy5OtMoN0WhmzFvJh9cxXoMVcERriGI2MLB6Edbo
+
+{
+  "name": "My first protected task"
+}
+
+###
+
+GET http://localhost:3000/api/v1/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTQxNTJjY2I5ZGMzYTJmODEwMTIyOTkiLCJuYW1lIjoiRm91YWQgU2FpZCIsImlhdCI6MTc2NjAwMjkwMSwiZXhwIjoxNzY2NjA3NzAxfQ.NZHEy5OtMoN0WhmzFvJh9cxXoMVcERriGI2MLB6Edbo
+
+###
+GET http://localhost:3000/test
+
+
+###
+
+DELETE http://localhost:3000/api/v1/tasks/6944073149b5825bf02a696a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTQxNTJjY2I5ZGMzYTJmODEwMTIyOTkiLCJuYW1lIjoiRm91YWQgU2FpZCIsImlhdCI6MTc2NjAwMjkwMSwiZXhwIjoxNzY2NjA3NzAxfQ.NZHEy5OtMoN0WhmzFvJh9cxXoMVcERriGI2MLB6Edbo
