@@ -6,6 +6,12 @@ const userValidationSchema = Joi.object({
     password: Joi.string().min(8).required()
 });
 
+const taskValidationSchema = Joi.object({
+    title: Joi.string().min(5).max(100).required(),
+    description: Joi.string().min(10).required(),
+    status: Joi.string().valid('pending', 'completed').default('pending')
+});
+
 const validateUser = (req, res, next) => {
     const { error } = userValidationSchema.validate(req.body);
     if (error) {
@@ -17,4 +23,15 @@ const validateUser = (req, res, next) => {
     next();
 };
 
-module.exports = { validateUser };
+const validateTask = (req, res, next) => {
+    const { error } = taskValidationSchema.validate(req.body);
+    if (error) {
+        return res.status(400).json({
+            status: 'error',
+            message: error.details[0].message
+        });
+    }
+    next();
+};
+
+module.exports = { validateUser, validateTask };
