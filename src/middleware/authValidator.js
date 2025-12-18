@@ -34,4 +34,19 @@ const validateTask = (req, res, next) => {
     next();
 };
 
-module.exports = { validateUser, validateTask };
+const idValidationSchema = Joi.object({
+    id: Joi.string().hex().length(24).required().messages({
+        'string.length': 'ID must be 24 characters long',
+        'string.hex': 'ID must be a valid hex string'
+    })
+});
+
+const validateId = (req, res, next) => {
+    const { error } = idValidationSchema.validate({ id: req.params.id });
+    if (error) {
+        return res.status(400).json({ status: 'error', message: error.details[0].message });
+    }
+    next();
+};
+
+module.exports = { validateUser, validateTask, validateId };

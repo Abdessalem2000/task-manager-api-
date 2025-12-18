@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const connectDB = require('./db');
+const errorHandler = require('./middleware/errorHandler')
 
 // Import Routes
 const authRouter = require('./routes/authRoute');
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/dashboard', authMiddleware, dashboardRouter);
 app.use('/api/v1/tasks', authMiddleware, taskRouter);
+app.use(errorHandler);
 
 // Health Check Route
 app.get('/', (req, res) => {
