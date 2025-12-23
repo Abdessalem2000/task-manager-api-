@@ -3,11 +3,12 @@ const Task = require('../models/Task');
 // Get all tasks for the logged-in user
 const getAllTasks = async (req, res) => {
     try {
-        const tasks = await Task.find({ createdBy: req.user.userId }).sort('createdAt');
+        const tasks = await Task.find({ user: req.user.userId });
         res.status(200).json({ tasks, count: tasks.length });
-    } catch (error) {
-        res.status(500).json({ msg: 'Error fetching tasks' });
-    }
+} catch (error) {
+    res.status(500).json({ msg:
+        error.message });
+}
 };
 
 const getTask = async (req, res) => {
@@ -27,11 +28,11 @@ const getTask = async (req, res) => {
 // Create a new task
 const createTask = async (req, res) => {
     try {
-        req.body.createdBy = req.user.userId;
+        req.body.user = req.user.userId;
         const task = await Task.create(req.body);
         res.status(201).json({ task });
     } catch (error) {
-        res.status(500).json({ msg: 'Error creating task' });
+        res.status(500).json({ msg: 'error.message' });
     }
 };
 

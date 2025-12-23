@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-// دالة التحقق - تضمين name و username باش ما يصرى حتى تعارض
+
 const validateRegister = (req, res, next) => {
     const schema = Joi.object({
         name: Joi.string().required(),
@@ -16,5 +16,5 @@ const validateRegister = (req, res, next) => {
     next();
 };
 
-// تصدير الدالة باسم واحد فقط
+
 module.exports = validateRegister;

@@ -6,6 +6,30 @@ Content-Type: application/json
     "password": "password123"
 }
 
-### جرب الـ GET Tasks (انسخ الـ Token من الفوق ولصقو هنا)
+### create task
+POST http://localhost:3000/api/v1/tasks
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTQ4MGI2YmM2YzRhMDQ5NjVhNzE1YWQiLCJuYW1lIjoieWFzc3JpMjAyNSIsImlhdCI6MTc2NjUyMzQyMSwiZXhwIjoxNzY5MTE1NDIxfQ.n1yp77XtUupeiv-4azWMMyznhLVVGXyLERZzZteQB2E
+
+{
+    "name": "My first task from vs code",
+    "completed": false
+}
+
+### get task
 GET http://localhost:3000/api/v1/tasks
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTQ4MGI2YmM2YzRhMDQ5NjVhNzE1YWQiLCJuYW1lIjoieWFzc3JpMjAyNSIsImlhdCI6MTc2NjUwOTYzNCwiZXhwIjoxNzY5MTAxNjM0fQ.9lzfBKb7AiQa7xJ47c3IYHSEcnRUS77FUzT2alGdvG0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTQ4MGI2YmM2YzRhMDQ5NjVhNzE1YWQiLCJuYW1lIjoieWFzc3JpMjAyNSIsImlhdCI6MTc2NjUyMzQyMSwiZXhwIjoxNzY5MTE1NDIxfQ.n1yp77XtUupeiv-4azWMMyznhLVVGXyLERZzZteQB2E
+
+### update task
+PUT http://localhost:3000/api/v1/tasks/123
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTQ4MGI2YmM2YzRhMDQ5NjVhNzE1YWQiLCJuYW1lIjoieWFzc3JpMjAyNSIsImlhdCI6MTc2NjUyNzE1MywiZXhwIjoxNzY5MTE5MTUzfQ.-9mjAN8oKQDRA3IL0pjk36P34GcgLxdHSuVEkTtFxfE
+
+{
+    "name": "Udated task",
+    "completed": true
+}
+
+### delete task
+DELETE http://localhost:3000/api/v1/tasks/123
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTQ4MGI2YmM2YzRhMDQ5NjVhNzE1YWQiLCJuYW1lIjoieWFzc3JpMjAyNSIsImlhdCI6MTc2NjUyNzE1MywiZXhwIjoxNzY5MTE5MTUzfQ.-9mjAN8oKQDRA3IL0pjk36P34GcgLxdHSuVEkTtFxfE

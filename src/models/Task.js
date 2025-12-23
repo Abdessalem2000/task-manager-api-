@@ -2,6 +2,12 @@
 const mongoose = require('mongoose');
 
 const TaskSchema = new mongoose.Schema({
+    user: {
+        type:
+        mongoose.Shema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    }
     name: {
         type: String,
         required: [true, 'Please provide task name'],
@@ -18,6 +24,8 @@ const TaskSchema = new mongoose.Schema({
         ref: 'User',
         required: [true, 'Please provide user'],
     },
-}, { timestamps: true });
+}, 
+{ timestamps: true });
+
 
 module.exports = mongoose.model('Task', TaskSchema);

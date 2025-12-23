@@ -7,19 +7,19 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // نلقى user من قاعدة البيانات
+    
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ msg: 'Invalid credentials' });
     }
 
-    // تحقق من password لو عندك hash
-    const isMatch = await user.comparePassword(password); // method موجودة في الموديل
+   
+    const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(401).json({ msg: 'Invalid credentials' });
     }
 
-    // توليد token
+   
     const token = user.createJWT();
       res.status(200).json({ msg: 'Login successful', token });
   } catch (error) {

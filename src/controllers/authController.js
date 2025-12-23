@@ -3,12 +3,12 @@ const { StatusCodes } = require('http-status-codes');
 
 const register = async (req, res, next) => { 
     try {
-        // كود التسجيل نتاعك
+        
         const user = await User.create({...req.body});
         const token = user.createJWT();
         res.status(201).json({ user: { name: user.name }, token });
     } catch (error) {
-        next(error); // هنا السيرفر يعيط لـ next، وإذا ما كانتش معرفة الفوق يخرجلك الخطأ
+        next(error); // 
     }
 };
 
