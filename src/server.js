@@ -1,40 +1,32 @@
 require('dotenv').config();
 const express = require('express');
-const app = express();
 const connectDB = require('./db');
-const errorHandler = require('./middleware/errorHandler')
-
-// Import Routes
 const authRouter = require('./routes/authRoute');
-const taskRouter = require('./routes/taskRoute');
 const dashboardRouter = require('./routes/dashboardRoute');
+const taskRouter = require('./routes/taskRoute');
 
-// Import Middleware
-const authMiddleware = require('./middleware/auth');
-
-// Global Middleware
+const app = express();
 app.use(express.json());
 
-// Routes Integration
-app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/dashboard', authMiddleware, dashboardRouter);
-app.use('/api/v1/tasks', authMiddleware, taskRouter);
-app.use(errorHandler);
+// Connect to MongoDB
+connectDB().catch(err => {
+  console.error('❌ MongoDB connection failed:', err);
+  process.exit(1);
+});
 
-// Health Check Route
-app.get('/', (req, res) => {
-  res.status(200).send('API is running smoothly');
+// Routes
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/dashboard', dashboardRouter);
+app.use('/api/v1/tasks', taskRouter);
+
+// Test route
+app.get('/test', (req, res) => res.send('Server is running'));
+
+// Error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ msg: 'Server error', error: err.message });
 });
 
 const PORT = process.env.PORT || 3000;
-
-const start = async () => {
-  try {
-    await connectDB();
-    app.listen(PORT, () => console.log(`Server listening on port ${PORT}...`));
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-start();
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`))

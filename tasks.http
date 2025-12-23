@@ -1,0 +1,11 @@
+POST http://localhost:3000/api/v1/auth/login
+Content-Type: application/json
+
+{ 
+    "email": "yassri@example.com",
+    "password": "password123"
+}
+
+### جرب الـ GET Tasks (انسخ الـ Token من الفوق ولصقو هنا)
+GET http://localhost:3000/api/v1/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTQ4MGI2YmM2YzRhMDQ5NjVhNzE1YWQiLCJuYW1lIjoieWFzc3JpMjAyNSIsImlhdCI6MTc2NjUwOTYzNCwiZXhwIjoxNzY5MTAxNjM0fQ.9lzfBKb7AiQa7xJ47c3IYHSEcnRUS77FUzT2alGdvG0

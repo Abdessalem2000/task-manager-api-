@@ -10,6 +10,20 @@ const getAllTasks = async (req, res) => {
     }
 };
 
+const getTask = async (req, res) => {
+    try {
+        const { id: taskId } = req.params;
+        const task = await Task.findOne({ _id: taskId, createdBy: req.user.userId });
+
+        if (!task) {
+            return res.status(404).json({ msg: `No task with id ${taskId}` });
+        }
+        res.status(200).json({ task });
+    } catch (error) {
+        res.status(500).json({ msg: error.message });
+    }
+};
+
 // Create a new task
 const createTask = async (req, res) => {
     try {
@@ -51,4 +65,4 @@ const deleteTask = async (req, res) => {
     }
 };
 
-module.exports = { getAllTasks, createTask, updateTask, deleteTask };
+module.exports = { getAllTasks, getTask, createTask, updateTask, deleteTask };

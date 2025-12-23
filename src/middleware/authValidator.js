@@ -1,52 +1,20 @@
 const Joi = require('joi');
 
-const userValidationSchema = Joi.object({
-    username: Joi.string().min(3).max(30).required(),
-    email: Joi.string().email().required(),
-    password: Joi.string().min(8).required()
-});
+// دالة التحقق - تضمين name و username باش ما يصرى حتى تعارض
+const validateRegister = (req, res, next) => {
+    const schema = Joi.object({
+        name: Joi.string().required(),
+        username: Joi.string().required(),
+        email: Joi.string().email().required(),
+        password: Joi.string().min(6).required()
+    });
 
-const taskValidationSchema = Joi.object({
-    title: Joi.string().min(5).max(100).required(),
-    description: Joi.string().min(10).required(),
-    status: Joi.string().valid('pending', 'completed').default('pending')
-});
-
-const validateUser = (req, res, next) => {
-    const { error } = userValidationSchema.validate(req.body);
-    if (error) {
-        return res.status(400).json({
-            status: 'error',
-            message: error.details[0].message
-        });
-    }
-    next();
-};
-
-const validateTask = (req, res, next) => {
-    const { error } = taskValidationSchema.validate(req.body);
-    if (error) {
-        return res.status(400).json({
-            status: 'error',
-            message: error.details[0].message
-        });
-    }
-    next();
-};
-
-const idValidationSchema = Joi.object({
-    id: Joi.string().hex().length(24).required().messages({
-        'string.length': 'ID must be 24 characters long',
-        'string.hex': 'ID must be a valid hex string'
-    })
-});
-
-const validateId = (req, res, next) => {
-    const { error } = idValidationSchema.validate({ id: req.params.id });
+    const { error } = schema.validate(req.body);
     if (error) {
         return res.status(400).json({ status: 'error', message: error.details[0].message });
     }
     next();
 };
 
-module.exports = { validateUser, validateTask, validateId };
+// تصدير الدالة باسم واحد فقط
+module.exports = validateRegister;

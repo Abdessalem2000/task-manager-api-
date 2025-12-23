@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../middleware/authMiddleware');
 
-// Dashboard route (Protected)
-router.get('/', (req, res) => {
+
+router.get('/', auth, (req, res) => {
+  console.log('REQ.USER:', req.user);
   res.status(200).json({
-    msg: `Hello, ${req.user.name}`,
-    secret: 'This is protected data that only logged-in users can see',
+    msg: `Dashboard OK ${req.user.name}`,
+    user: req.user
   });
 });
 

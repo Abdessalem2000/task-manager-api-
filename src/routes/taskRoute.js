@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { createTask } = require('../controllers/taskController');
-const { validateTask } = require('../middleware/authValidator');
+const auth = require('../middleware/authMiddleware');
 
-router.post('/', validateTask, createTask);
-router.put('/:id', validateId, updateTask);
-router.delete('/:id', validateId, deleteTask);
+
+router.get('/', auth, (req, res) => {
+  res.status(200).json({
+    msg: 'Tasks OK',
+    user: req.user
+  });
+});
 
 module.exports = router;
