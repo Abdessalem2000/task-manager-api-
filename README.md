@@ -21,3 +21,11 @@ A professional Node.js Backend with structured architecture and strong data vali
 - `POST /api/v1/tasks` - Create task (Validated).
 - `PUT /api/v1/tasks/:id` - Update task (Validated ID).
 - `DELETE /api/v1/tasks/:id` - Remove task (Validated ID).
+
+## 🚀 Deployment
+The API is deployed on **Render** and connected to **MongoDB Atlas**.
+
+- **Base URL:** `https://task-manager-api-x8q7.onrender.com/api/v1`
+- **Status:** Live ✅
+
+> **Note:** Since this is hosted on a free tier, the first request might take a few seconds to wake up the server.
