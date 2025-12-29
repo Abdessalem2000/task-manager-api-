@@ -8,8 +8,9 @@ const taskRouter = require('./routes/taskRoute');
 
 const app = express();
 app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE']
+  origin: ['https://task-manager-frontend-opal-nu.vercel.app', 'http://localhost:5173', 'http://localhost:3000'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
 }));
 app.use(express.json());
 
