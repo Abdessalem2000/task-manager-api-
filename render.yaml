@@ -1,0 +1,15 @@
+services:
+  # Backend API Service
+  - type: web
+    name: saas-analytics-api
+    runtime: node
+    plan: free
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false # You'll need to set this in Render dashboard
+    healthCheckPath: /test
