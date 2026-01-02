@@ -13,6 +13,25 @@ console.log('🔍 DEBUG: Environment check:');
 console.log('🔍 DEBUG: PORT:', process.env.PORT || '3000 (default)');
 console.log('🔍 DEBUG: NODE_ENV:', process.env.NODE_ENV);
 
+// CORS MUST be the very first middleware
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
+  res.header('Access-Control-Max-Age', '86400');
+  
+  if (req.method === 'OPTIONS') {
+    console.log('🔍 DEBUG: OPTIONS request received:', {
+      origin: req.headers.origin,
+      method: req.headers['access-control-request-method'],
+      headers: req.headers['access-control-request-headers']
+    });
+    return res.status(200).end();
+  }
+  next();
+});
+
+// Then use cors middleware as backup
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -21,20 +40,6 @@ app.use(cors({
   optionsSuccessStatus: 200,
   preflightContinue: false
 }));
-
-// Explicit OPTIONS handler for debugging
-app.options('*', (req, res) => {
-  console.log('🔍 DEBUG: OPTIONS request received:', {
-    origin: req.headers.origin,
-    method: req.headers['access-control-request-method'],
-    headers: req.headers['access-control-request-headers']
-  });
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
-  res.header('Access-Control-Max-Age', '86400');
-  res.send(200);
-});
 
 app.use(express.json());
 
