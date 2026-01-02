@@ -12,27 +12,14 @@ console.log('🔍 DEBUG: Environment check:');
 console.log('🔍 DEBUG: PORT:', process.env.PORT || '3000 (default)');
 console.log('🔍 DEBUG: NODE_ENV:', process.env.NODE_ENV);
 
-// Set headers for ALL responses
+// Simple CORS middleware
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.header('Access-Control-Max-Age', '86400');
-  
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
   if (req.method === 'OPTIONS') {
-    console.log('🔍 DEBUG: OPTIONS request received:', {
-      origin: req.headers.origin,
-      method: req.headers['access-control-request-method'],
-      headers: req.headers['access-control-request-headers']
-    });
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    res.header('Access-Control-Max-Age', '86400');
-    return res.status(200).end();
+    return res.sendStatus(200);
   }
-  
-  console.log('🔍 DEBUG: Headers set for request:', req.method, req.url);
   next();
 });
 
