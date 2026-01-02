@@ -14,10 +14,27 @@ console.log('🔍 DEBUG: PORT:', process.env.PORT || '3000 (default)');
 console.log('🔍 DEBUG: NODE_ENV:', process.env.NODE_ENV);
 
 app.use(cors({
-  origin: ['https://task-manager-frontend-opal-nu.vercel.app', 'http://localhost:5173', 'http://localhost:3000'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  credentials: false,
+  optionsSuccessStatus: 200,
+  preflightContinue: false
 }));
+
+// Explicit OPTIONS handler for debugging
+app.options('*', (req, res) => {
+  console.log('🔍 DEBUG: OPTIONS request received:', {
+    origin: req.headers.origin,
+    method: req.headers['access-control-request-method'],
+    headers: req.headers['access-control-request-headers']
+  });
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
+  res.header('Access-Control-Max-Age', '86400');
+  res.send(200);
+});
 
 app.use(express.json());
 
