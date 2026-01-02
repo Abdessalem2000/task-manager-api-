@@ -19,8 +19,10 @@ function App() {
 
   const fetchTasks = () => {
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-    console.log('🔍 DEBUG: Fetching tasks from:', `${API_URL}/api/v1/tasks`);
-    fetch(`${API_URL}/api/v1/tasks`)
+    console.log('🔍 DEBUG: VITE_API_URL environment variable:', import.meta.env.VITE_API_URL);
+    console.log('🔍 DEBUG: Using API_URL:', API_URL);
+    console.log('🔍 DEBUG: Full fetch URL:', `${API_URL}/api/tasks`);
+    fetch(`${API_URL}/api/tasks`)
       .then(res => {
         console.log('🔍 DEBUG: Fetch response status:', res.status);
         console.log('🔍 DEBUG: Fetch response headers:', res.headers);
@@ -41,8 +43,8 @@ function App() {
 
   const deleteTask = (taskId) => {
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-    console.log('🔍 DEBUG: Deleting task from:', `${API_URL}/api/v1/tasks/${taskId}`);
-    fetch(`${API_URL}/api/v1/tasks/${taskId}`, {
+    console.log('🔍 DEBUG: Deleting task from:', `${API_URL}/api/tasks/${taskId}`);
+    fetch(`${API_URL}/api/tasks/${taskId}`, {
       method: 'DELETE'
     })
     .then(res => {
@@ -73,10 +75,12 @@ function App() {
       completed: false
     };
     
-    console.log('🔍 DEBUG: Adding task to:', `${API_URL}/api/v1/tasks`);
+    console.log('🔍 DEBUG: VITE_API_URL environment variable:', import.meta.env.VITE_API_URL);
+    console.log('🔍 DEBUG: Using API_URL:', API_URL);
+    console.log('🔍 DEBUG: Adding task to:', `${API_URL}/api/tasks`);
     console.log('🔍 DEBUG: Task data:', taskData);
     
-    fetch(`${API_URL}/api/v1/tasks`, {
+    fetch(`${API_URL}/api/tasks`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

@@ -43,7 +43,7 @@ connectDB().catch(err => {
 // Routes
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/dashboard', dashboardRouter);
-app.use('/api/v1/tasks', taskRouter);
+app.use('/api/tasks', taskRouter);
 
 // Test route
 app.get('/test', (req, res) => {
