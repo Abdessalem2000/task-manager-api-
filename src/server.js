@@ -8,10 +8,10 @@ const taskRouter = require('./routes/taskRoute');
 const app = express();
 
 // Check required environment variables
-if (!process.env['JWT_SECRET-KEY']) {
-  console.error('❌ WARNING: JWT_SECRET-KEY environment variable is not defined');
+if (!process.env.JWT_SECRET_KEY && !process.env.JWT_SECRET) {
+  console.error('❌ WARNING: JWT_SECRET_KEY or JWT_SECRET environment variable is not defined');
   console.error('❌ Authentication will not work properly');
-  console.error('❌ Please set JWT_SECRET-KEY in your environment variables');
+  console.error('❌ Please set JWT_SECRET_KEY in your environment variables');
 }
 
 console.log('🚀 Server starting...');
