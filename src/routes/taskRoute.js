@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 
 //create Task
 router.post('/', async (req, res) => {
-    console.log(' DEBUG: POST /api/v1/tasks route hit');
+    console.log(' DEBUG: POST /api/tasks route hit');
     console.log(' DEBUG: Request body:', req.body);
     try {
         const { name, completed } = req.body;
@@ -34,11 +34,16 @@ router.post('/', async (req, res) => {
         
         if (!name || name.trim() === '') {
             console.error(' DEBUG: Task name is empty or invalid');
-            return res.status(400).json({ msg: 'Task name is required' });
+            return res.status(400).json({ 
+                msg: 'Task name is required',
+                error: 'Task name cannot be empty',
+                details: { name: name || 'undefined' }
+            });
         }
         
         console.log(' DEBUG: Attempting to create task in MongoDB...');
-        // نحينا سطر user: req.user.userId لأنه هو اللي راهو يدير Error 500
+        
+        // Create task without user field since we're not using auth
         const task = await Task.create({ 
             name: name.trim(), 
             completed: completed || false 
@@ -50,14 +55,38 @@ router.post('/', async (req, res) => {
 
         res.status(201).json({ 
             msg: 'Task created successfully', 
-            task 
+            task: task,
+            success: true
         });
     } catch (err) {
         console.error(' DEBUG: Error creating task:', err.message);
         console.error(' DEBUG: Full error object:', err);
         console.error(' DEBUG: Error stack:', err.stack);
         console.error(' DEBUG: Validation errors:', err.errors);
-        res.status(500).json({ msg: err.message });
+        
+        // Send detailed error back to frontend
+        let errorMessage = 'Failed to create task';
+        let errorDetails = {};
+        
+        if (err.name === 'ValidationError') {
+            errorMessage = 'Validation failed';
+            errorDetails = Object.keys(err.errors).reduce((acc, key) => {
+                acc[key] = err.errors[key].message;
+                return acc;
+            }, {});
+        } else if (err.name === 'MongoError' || err.name === 'MongoServerError') {
+            errorMessage = 'Database error';
+            errorDetails = { code: err.code, message: err.message };
+        } else {
+            errorDetails = { message: err.message, stack: err.stack };
+        }
+        
+        res.status(500).json({ 
+            msg: errorMessage,
+            error: err.message,
+            details: errorDetails,
+            success: false
+        });
     }
 });
 
