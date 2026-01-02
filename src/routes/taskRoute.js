@@ -5,7 +5,7 @@ const Task = require('../models/Task');
 
 // GET task
 router.get('/', async (req, res) => {
-  console.log(' DEBUG: GET /api/v1/tasks route hit');
+  console.log('🔍 DEBUG: GET /api/tasks route hit');
   try {
    console.log(' DEBUG: Attempting to fetch tasks from MongoDB...');
    const tasks = await Task.find({});
@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 
 //create Task
 router.post('/', async (req, res) => {
-    console.log(' DEBUG: POST /api/tasks route hit');
+    console.log('🔍 DEBUG: POST /api/tasks route hit');
     console.log(' DEBUG: Request body:', req.body);
     try {
         const { name, completed } = req.body;

@@ -55,6 +55,20 @@ app.get('/test', (req, res) => {
   res.send('Server is running');
 });
 
+// Health check route
+app.get('/health', (req, res) => {
+  console.log('🔍 DEBUG: Health check route hit');
+  res.json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    routes: {
+      tasks: '/api/tasks',
+      auth: '/api/v1/auth',
+      dashboard: '/api/v1/dashboard'
+    }
+  });
+});
+
 // Error handler
 app.use((err, req, res, next) => {
   console.error('❌ Global error handler triggered:');
