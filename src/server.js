@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
 const connectDB = require('./db');
 const authRouter = require('./routes/authRoute');
 const dashboardRouter = require('./routes/dashboardRoute');
@@ -13,11 +12,11 @@ console.log('🔍 DEBUG: Environment check:');
 console.log('🔍 DEBUG: PORT:', process.env.PORT || '3000 (default)');
 console.log('🔍 DEBUG: NODE_ENV:', process.env.NODE_ENV);
 
-// CORS MUST be the very first middleware
+// Set headers for ALL responses
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   res.header('Access-Control-Max-Age', '86400');
   
   if (req.method === 'OPTIONS') {
@@ -26,20 +25,16 @@ app.use((req, res, next) => {
       method: req.headers['access-control-request-method'],
       headers: req.headers['access-control-request-headers']
     });
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.header('Access-Control-Max-Age', '86400');
     return res.status(200).end();
   }
+  
+  console.log('🔍 DEBUG: Headers set for request:', req.method, req.url);
   next();
 });
-
-// Then use cors middleware as backup
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
-  credentials: false,
-  optionsSuccessStatus: 200,
-  preflightContinue: false
-}));
 
 app.use(express.json());
 
