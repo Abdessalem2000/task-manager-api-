@@ -7,6 +7,15 @@ const taskRouter = require('./routes/taskRoute');
 
 const app = express();
 
+// Check required environment variables
+if (!process.env.JWT_SECRET_KEY) {
+  console.error('❌ FATAL: JWT_SECRET_KEY environment variable is not defined');
+  console.error('❌ Please set JWT_SECRET_KEY in your environment variables');
+  process.exit(1);
+}
+
+console.log('🚀 Server starting...');
+
 // CORS middleware
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');

@@ -22,7 +22,7 @@ router.post('/register', async (req, res) => {
     });
   } catch (error) {
     console.error('REGISTER ERROR:', error);
-    res.status(500).json({ msg: 'Server error', error: error.message });
+    res.status(500).json({ msg: error.message });
   }
 });
 
@@ -30,19 +30,16 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ msg: 'Invalid credentials' });
     }
 
-   
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(401).json({ msg: 'Invalid credentials' });
     }
 
-   
     const token = user.createJWT();
     res.status(200).json({ 
       msg: 'Login successful', 
@@ -51,7 +48,7 @@ router.post('/login', async (req, res) => {
     });
   } catch (error) {
     console.error('LOGIN ERROR:', error);
-    res.status(500).json({ msg: 'Server error', error: error.message });
+    res.status(500).json({ msg: error.message });
   }
 });
 
