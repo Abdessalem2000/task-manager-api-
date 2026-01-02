@@ -17,7 +17,7 @@ router.get('/', auth, async (req, res) => {
 //create Task
 router.post('/', auth, async (req, res) => {
     try {
-        const { name, completed } = req.body;
+        const { name, completed, priority, category } = req.body;
         
         if (!name || name.trim() === '') {
             return res.status(400).json({ 
@@ -28,6 +28,8 @@ router.post('/', auth, async (req, res) => {
         const task = await Task.create({ 
             name: name.trim(), 
             completed: completed || false,
+            priority: priority || 'medium',
+            category: category || 'work',
             user: req.user.userId
         });
 

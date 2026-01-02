@@ -13,6 +13,16 @@ const TaskSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    priority: {
+        type: String,
+        enum: ['low', 'medium', 'high'],
+        default: 'medium'
+    },
+    category: {
+        type: String,
+        enum: ['work', 'personal', 'shopping'],
+        default: 'work'
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
