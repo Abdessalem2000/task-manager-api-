@@ -9,7 +9,7 @@ const auth = (req, res, next) => {
   const token = authHeader.split(' ')[1];
 
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const payload = jwt.verify(token, process.env['JWT_SECRET-KEY']);
     req.user = { userId: payload.userId, name: payload.name };
     next();
   } catch (error) {
