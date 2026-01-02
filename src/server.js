@@ -7,12 +7,7 @@ const taskRouter = require('./routes/taskRoute');
 
 const app = express();
 
-console.log('🔍 DEBUG: Server starting...');
-console.log('🔍 DEBUG: Environment check:');
-console.log('🔍 DEBUG: PORT:', process.env.PORT || '3000 (default)');
-console.log('🔍 DEBUG: NODE_ENV:', process.env.NODE_ENV);
-
-// Simple CORS middleware
+// CORS middleware
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
@@ -25,22 +20,9 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-// Add request logging middleware
-app.use((req, res, next) => {
-  console.log('🔍 DEBUG: Incoming request:', {
-    method: req.method,
-    url: req.url,
-    headers: req.headers,
-    body: req.body,
-    timestamp: new Date().toISOString()
-  });
-  next();
-});
-
 // Connect to MongoDB
 connectDB().catch(err => {
-  console.error('❌ MongoDB connection failed:', err);
-  console.error('❌ Server will exit due to DB connection failure');
+  console.error('MongoDB connection failed:', err);
   process.exit(1);
 });
 
@@ -51,13 +33,11 @@ app.use('/api/tasks', taskRouter);
 
 // Test route
 app.get('/test', (req, res) => {
-  console.log('🔍 DEBUG: Test route hit');
   res.send('Server is running');
 });
 
 // Health check route
 app.get('/health', (req, res) => {
-  console.log('🔍 DEBUG: Health check route hit');
   res.json({ 
     status: 'ok', 
     timestamp: new Date().toISOString(),
@@ -71,19 +51,11 @@ app.get('/health', (req, res) => {
 
 // Error handler
 app.use((err, req, res, next) => {
-  console.error('❌ Global error handler triggered:');
-  console.error('❌ Error:', err.message);
-  console.error('❌ Stack:', err.stack);
-  console.error('❌ Request:', {
-    method: req.method,
-    url: req.url,
-    body: req.body
-  });
+  console.error('Server error:', err.message);
   res.status(500).json({ msg: 'Server error', error: err.message });
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`🔍 DEBUG: Server started at ${new Date().toISOString()}`);
 });
