@@ -21,6 +21,10 @@
 5. Add Environment Variables:
    - `NODE_ENV`: `production`
    - `MONGO_URI`: Your MongoDB Atlas connection string
+   - `JWT_SECRET`: Your JWT secret key
+   - `DATABASE_URL`: Your MongoDB connection string
+   - `PORT`: `5000`
+   - `CORS_ORIGIN`: `*` or your frontend domain
 6. Click "Create Web Service"
 
 ### Step 3: Get Backend URL
