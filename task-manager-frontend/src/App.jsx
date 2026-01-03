@@ -224,7 +224,7 @@ const SortableTaskCard = ({ task, theme, darkMode, toggleTaskComplete, deleteTas
 };
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({ name: 'yahia', email: 'yahia@example.com' });
   const [tasks, setTasks] = useState([]);
   const [newTaskName, setNewTaskName] = useState('');
   const [toast, setToast] = useState(null);
