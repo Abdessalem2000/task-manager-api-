@@ -1270,10 +1270,12 @@ function App() {
             }}>
               {user?.name || 'User'}
               <span style={{
-                fontSize: '1.2rem',
+                fontSize: '1.3rem',
                 color: '#FF6B35',
+                fontWeight: '700',
                 filter: showStreakAnimation ? 'hue-rotate(0deg)' : 'none',
-                animation: showStreakAnimation ? 'flameFlicker 0.5s ease-in-out infinite' : 'none'
+                animation: showStreakAnimation ? 'flameFlicker 0.5s ease-in-out infinite' : 'none',
+                textShadow: '0 0 8px rgba(255, 107, 53, 0.6)'
               }}>
                 🔥 {dailyStreak}
               </span>
@@ -1336,9 +1338,12 @@ function App() {
             </div>
             
             <div style={{
-              fontSize: '10px',
-              color: theme.textSecondary,
-              textAlign: 'center'
+              fontSize: '12px',
+              fontWeight: '600',
+              color: '#1DB954',
+              textAlign: 'center',
+              marginTop: '5px',
+              textShadow: '0 0 4px rgba(29, 185, 84, 0.3)'
             }}>
               {getNextLevelXP() - userXP} XP to Level {userLevel + 1}
             </div>
