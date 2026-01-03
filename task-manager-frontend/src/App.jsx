@@ -23,9 +23,7 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 
-// Import CSS for dnd-kit
-import '@dnd-kit/core/dist/style.css';
-import '@dnd-kit/sortable/dist/style.css';
+// Note: dnd-kit CSS styles are handled inline
 
 // Sortable Task Card Component
 const SortableTaskCard = ({ task, theme, darkMode, toggleTaskComplete, deleteTask, alarms, setShowAlarmPopup, priorityColors, categoryColors, index }) => {
@@ -425,9 +423,9 @@ function App() {
     
     // Initialize XP if not exists
     if (!savedXP) {
-      console.log('🔥 Initializing XP to 0');
-      setUserXP(0);
-      localStorage.setItem('userXP', '0');
+      console.log('🔥 Initializing XP to 10');
+      setUserXP(10);
+      localStorage.setItem('userXP', '10');
     }
     
     // Initialize level if not exists

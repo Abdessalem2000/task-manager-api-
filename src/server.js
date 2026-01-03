@@ -8,7 +8,7 @@ const taskRouter = require('./routes/taskRoute');
 const app = express();
 
 // Check required environment variables
-const requiredEnvVars = ['JWT_SECRET', 'DATABASE_URL'];
+const requiredEnvVars = ['JWT_SECRET_KEY', 'MONGO_URI'];
 const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
 
 if (missingVars.length > 0) {
@@ -23,7 +23,7 @@ if (missingVars.length > 0) {
 
 console.log('🚀 Server starting...');
 console.log('🔧 Environment:', process.env.NODE_ENV || 'development');
-console.log('🔗 Database URL:', process.env.DATABASE_URL ? '✅ Configured' : '❌ Missing');
+console.log('🔗 Database URL:', process.env.MONGO_URI ? '✅ Configured' : '❌ Missing');
 
 // CORS middleware
 app.use((req, res, next) => {
@@ -86,13 +86,12 @@ app.use((err, req, res, next) => {
 });
 
 // 404 handler
-app.use('*', (req, res) => {
+app.use((req, res) => {
   res.status(404).json({ msg: 'Route not found' });
 });
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔗 Health check: http://localhost:${PORT}/health`);
 });

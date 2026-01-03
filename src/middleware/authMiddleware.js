@@ -14,11 +14,11 @@ const auth = (req, res, next) => {
   const token = authHeader.split(' ')[1];
 
   try {
-    // Use JWT_SECRET with fallback to JWT_SECRET_KEY for compatibility
-    const jwtSecret = process.env.JWT_SECRET || process.env.JWT_SECRET_KEY;
+    // Use JWT_SECRET_KEY with fallback to JWT_SECRET for compatibility
+    const jwtSecret = process.env.JWT_SECRET_KEY || process.env.JWT_SECRET;
     
     if (!jwtSecret) {
-      console.error('❌ JWT_SECRET environment variable is not defined');
+      console.error('❌ JWT_SECRET_KEY environment variable is not defined');
       return res.status(500).json({ 
         msg: 'Server configuration error',
         error: 'JWT secret not configured'
