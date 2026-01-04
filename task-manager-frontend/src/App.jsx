@@ -1268,17 +1268,7 @@ function App() {
               e.currentTarget.style.color = theme.text;
               e.currentTarget.style.textDecoration = 'none';
             }}>
-              {user?.name || 'User'}
-              <span style={{
-                fontSize: '1.3rem',
-                color: '#FF6B35',
-                fontWeight: '700',
-                filter: showStreakAnimation ? 'hue-rotate(0deg)' : 'none',
-                animation: showStreakAnimation ? 'flameFlicker 0.5s ease-in-out infinite' : 'none',
-                textShadow: '0 0 8px rgba(255, 107, 53, 0.6)'
-              }}>
-                🔥 {dailyStreak}
-              </span>
+              <span className="text-2xl">{user?.name || 'User'} 🔥</span>
             </h3>
             
             {/* Level Indicator */}
