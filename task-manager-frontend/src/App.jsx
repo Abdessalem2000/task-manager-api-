@@ -1980,7 +1980,7 @@ function App() {
                 fontSize: '2rem',
                 fontWeight: '700'
               }}>
-                Task Manager
+                TASK V2
               </h1>
             </div>
 
