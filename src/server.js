@@ -46,35 +46,46 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-// Connect to MongoDB
-connectDB().catch(err => {
-  console.error('❌ MongoDB connection failed:', err);
-  process.exit(1);
-});
+// Connect to MongoDB and wait for connection before starting routes
+connectDB()
+  .then(() => {
+    console.log('🔗 Database connected, setting up routes...');
+    
+    // Routes
+    app.use('/api/v1/auth', authRouter);
+    app.use('/api/v1/dashboard', dashboardRouter);
+    app.use('/api/tasks', taskRouter);
 
-// Routes
-app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/dashboard', dashboardRouter);
-app.use('/api/tasks', taskRouter);
+    // Test route
+    app.get('/test', (req, res) => {
+      res.json({ 
+        status: 'Server is running', 
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'development'
+      });
+    });
 
-// Test route
-app.get('/test', (req, res) => {
-  res.json({ 
-    status: 'Server is running', 
-    timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development'
+    // Health check route
+    app.get('/health', (req, res) => {
+      res.json({ 
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        environment: process.env.NODE_ENV || 'development'
+      });
+    });
+
+    // Start server only after DB is connected
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`🔗 Health check: http://localhost:${PORT}/health`);
+    });
+  })
+  .catch(err => {
+    console.error('❌ MongoDB connection failed:', err);
+    process.exit(1);
   });
-});
-
-// Health check route
-app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'healthy',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    environment: process.env.NODE_ENV || 'development'
-  });
-});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -88,10 +99,4 @@ app.use((err, req, res, next) => {
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({ msg: 'Route not found' });
-});
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`🔗 Health check: http://localhost:${PORT}/health`);
 });
