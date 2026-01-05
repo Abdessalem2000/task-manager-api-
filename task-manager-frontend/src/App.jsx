@@ -1487,6 +1487,11 @@ function App() {
             </p>
           </div>
 
+          {/* FORCED VISIBLE THEME TOGGLE */}
+          <div style={{ marginTop: '30px', marginBottom: '20px' }}>
+            <ThemeToggle darkMode={darkMode} setDarkMode={setDarkMode} theme={theme} />
+          </div>
+
           {/* Category Navigation */}
           <div style={{ marginTop: '30px' }}>
             <h4 style={{ 
