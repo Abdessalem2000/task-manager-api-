@@ -1274,6 +1274,23 @@ function App() {
       right: '0',
       color: theme.text
     }}>
+      {/* DEBUG TEXT - TEST VERSION 2.0 */}
+      <div style={{
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        right: '0',
+        backgroundColor: '#FF0000',
+        color: '#FFFFFF',
+        padding: '10px',
+        textAlign: 'center',
+        fontSize: '16px',
+        fontWeight: 'bold',
+        zIndex: 99999,
+        boxShadow: '0 2px 10px rgba(255,0,0,0.5)'
+      }}>
+        🚀 TEST VERSION 2.0 - Theme Toggle Should Be Visible Now! 🚀
+      </div>
       {/* Sidebar */}
       <div style={{
         width: sidebarOpen ? '280px' : '0',
