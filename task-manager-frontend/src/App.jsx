@@ -431,9 +431,19 @@ function App() {
     showToast('Logged out successfully', 'success');
   };
 
+  // Handle clear session (fix 401 errors)
+  const handleClearSession = () => {
+    localStorage.clear();
+    setUser(null);
+    setTasks([]);
+    setDarkMode(false);
+    showToast('Session cleared! Please refresh and re-login.', 'info');
+  };
+
   // Fetch tasks (only when user is authenticated)
   const fetchTasks = () => {
     if (!user) return;
+    // ... (rest of the code remains the same)
     
     const token = localStorage.getItem('token');
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -1860,8 +1870,35 @@ function App() {
             <ThemeToggle darkMode={darkMode} setDarkMode={setDarkMode} theme={theme} />
           </div>
 
-          {/* Logout */}
+          {/* Session Management */}
           <div style={{ marginTop: '20px' }}>
+            <button
+              onClick={handleClearSession}
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                backgroundColor: '#FF6B35',
+                color: 'white',
+                border: '2px solid #FF6B35',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '600',
+                transition: 'all 0.2s ease',
+                marginBottom: '10px'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = '#FF5722';
+                e.target.style.transform = 'scale(1.02)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = '#FF6B35';
+                e.target.style.transform = 'scale(1)';
+              }}
+            >
+              🔄 Clear Session (Fix 401)
+            </button>
+            
             <button
               onClick={handleLogout}
               style={{
@@ -1873,6 +1910,7 @@ function App() {
                 borderRadius: '8px',
                 cursor: 'pointer',
                 fontSize: '14px',
+                fontWeight: '500',
                 transition: 'all 0.2s ease'
               }}
             >
