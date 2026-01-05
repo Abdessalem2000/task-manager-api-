@@ -25,55 +25,6 @@ import {
 
 // Note: dnd-kit CSS styles are handled inline
 
-// Theme Toggle Component
-const ThemeToggle = ({ darkMode, setDarkMode, theme }) => {
-  const handleThemeToggle = () => {
-    const newTheme = !darkMode;
-    setDarkMode(newTheme);
-    
-    // Save with safety check as 'light' or 'dark'
-    try {
-      localStorage.setItem('darkMode', JSON.stringify(newTheme ? 'dark' : 'light'));
-    } catch (e) {
-      console.warn('Failed to save theme preference:', e);
-    }
-  };
-
-  return (
-    <button
-      onClick={handleThemeToggle}
-      style={{
-        backgroundColor: 'transparent',
-        border: `1px solid ${theme.border}`,
-        borderRadius: '8px',
-        padding: '8px 12px',
-        cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px',
-        fontSize: '14px',
-        color: theme.text,
-        transition: 'all 0.2s ease',
-        fontWeight: '500'
-      }}
-      onMouseEnter={(e) => {
-        e.target.style.backgroundColor = theme.hoverBg;
-        e.target.style.transform = 'scale(1.05)';
-      }}
-      onMouseLeave={(e) => {
-        e.target.style.backgroundColor = 'transparent';
-        e.target.style.transform = 'scale(1)';
-      }}
-      title={`Switch to ${darkMode ? 'light' : 'dark'} mode`}
-    >
-      {darkMode ? '☀️' : '🌙'}
-      <span style={{ fontSize: '12px' }}>
-        {darkMode ? 'Light' : 'Dark'}
-      </span>
-    </button>
-  );
-};
-
 // Sortable Task Card Component
 const SortableTaskCard = ({ task, theme, darkMode, toggleTaskComplete, deleteTask, alarms, setShowAlarmPopup, priorityColors, categoryColors, index }) => {
   const {
@@ -273,7 +224,6 @@ const SortableTaskCard = ({ task, theme, darkMode, toggleTaskComplete, deleteTas
 };
 
 function App() {
-  console.log('🔥 App is mounting...');
   try {
   const [user, setUser] = useState({ name: 'yahia', email: 'yahia@example.com' });
   const [tasks, setTasks] = useState([]);
@@ -319,22 +269,6 @@ function App() {
 
   // Check for existing authentication on mount
   useEffect(() => {
-    console.log('🔥 useEffect is running...');
-    
-    // Safety check: Clear corrupted localStorage
-    try {
-      const testKeys = ['user', 'token', 'darkMode', 'sidebarOpen', 'userLevel', 'userXP', 'badges', 'dailyStreak', 'lastActiveDate', 'habits', 'alarms'];
-      testKeys.forEach(key => {
-        const value = localStorage.getItem(key);
-        if (value && (value.includes('undefined') || value.includes('[object Object]'))) {
-          console.warn(`Clearing corrupted localStorage key: ${key}`);
-          localStorage.removeItem(key);
-        }
-      });
-    } catch (e) {
-      console.warn('localStorage safety check failed:', e);
-    }
-    
     const token = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
     
@@ -343,7 +277,6 @@ function App() {
         setUser(JSON.parse(savedUser));
       } catch (e) {
         console.error('Error parsing savedUser:', e);
-        localStorage.removeItem('user');
       }
     }
 
@@ -351,16 +284,9 @@ function App() {
     const savedTheme = localStorage.getItem('darkMode');
     if (savedTheme) {
       try {
-        const parsed = JSON.parse(savedTheme);
-        // Handle both boolean and string formats for compatibility
-        if (typeof parsed === 'string') {
-          setDarkMode(parsed === 'dark');
-        } else {
-          setDarkMode(parsed || false);
-        }
+        setDarkMode(JSON.parse(savedTheme));
       } catch (e) {
         console.error('Error parsing savedTheme:', e);
-        setDarkMode(false);
       }
     }
 
@@ -375,13 +301,9 @@ function App() {
     }
   }, []);
 
-  // Save theme preference with safety check
+  // Save theme preference
   useEffect(() => {
-    try {
-      localStorage.setItem('darkMode', JSON.stringify(darkMode ? 'dark' : 'light'));
-    } catch (e) {
-      console.warn('Failed to save theme preference:', e);
-    }
+    localStorage.setItem('darkMode', JSON.stringify(darkMode || false));
   }, [darkMode]);
 
   // Save sidebar preference
@@ -745,12 +667,7 @@ function App() {
   useEffect(() => {
     const savedAlarms = localStorage.getItem('alarms');
     if (savedAlarms) {
-      try {
-        setAlarms(JSON.parse(savedAlarms));
-      } catch (e) {
-        console.error('Error parsing savedAlarms:', e);
-        setAlarms({});
-      }
+      setAlarms(JSON.parse(savedAlarms));
     }
   }, []);
 
@@ -760,7 +677,7 @@ function App() {
       const now = new Date();
       Object.entries(alarms).forEach(([taskId, alarmTime]) => {
         if (alarmTime && new Date(alarmTime) <= now) {
-          const task = (tasks || []).find(t => t._id === taskId);
+          const task = tasks.find(t => t._id === taskId);
           if (task) {
             setShowAlarmModal(task);
             // Play ding sound
@@ -782,7 +699,7 @@ function App() {
   }, [alarms, tasks]);
 
   // Filter tasks based on search and category
-  const filteredTasks = (tasks || []).filter(task => {
+  const filteredTasks = tasks.filter(task => {
     const matchesSearch = task.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || task.category === selectedCategory;
     return matchesSearch && matchesCategory;
@@ -794,6 +711,20 @@ function App() {
 
     if (active.id !== over.id) {
       const oldIndex = filteredTasks.findIndex((task) => task._id === active.id);
+      const newIndex = filteredTasks.findIndex((task) => task._id === over.id);
+      
+      if (oldIndex !== -1 && newIndex !== -1) {
+        const newTasks = arrayMove(filteredTasks, oldIndex, newIndex);
+        
+        // Update the order in the main tasks array
+        const updatedTasks = tasks.map(task => {
+          const newTask = newTasks.find(t => t._id === task._id);
+          return newTask || task;
+        });
+        
+        setTasks(updatedTasks);
+        showToast('📋 Task order updated!', 'success');
+      }
     }
     
     setActiveId(null);
@@ -1034,8 +965,7 @@ function App() {
     textSecondary: '#A7A7A7',
     border: '#282828',
     inputBg: '#282828',
-    sidebarBg: '#181818',
-    hoverBg: 'rgba(255,255,255,0.1)'
+    sidebarBg: '#181818'
   } : {
     bg: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
     cardBg: 'rgba(255, 255, 255, 0.9)',
@@ -1043,8 +973,7 @@ function App() {
     textSecondary: '#5f6368',
     border: 'rgba(255,255,255,0.2)',
     inputBg: 'white',
-    sidebarBg: 'rgba(255,255,255,0.95)',
-    hoverBg: 'rgba(0,0,0,0.05)'
+    sidebarBg: 'rgba(255,255,255,0.95)'
   };
 
   // Priority colors
@@ -1062,7 +991,7 @@ function App() {
   };
 
   const toggleTaskComplete = (taskId) => {
-    const task = (tasks || []).find(t => t._id === taskId);
+    const task = tasks.find(t => t._id === taskId);
     if (!task) return;
 
     const token = localStorage.getItem('token');
@@ -1092,7 +1021,7 @@ function App() {
         awardXP(10, 'First Task Completed');
         
         // Check for weekly warrior badge (7 tasks completed in a week)
-        const completedThisWeek = (tasks || []).filter(t => 
+        const completedThisWeek = tasks.filter(t => 
           t.completed && 
           new Date(t.updatedAt || t.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
         ).length;
@@ -1371,7 +1300,7 @@ function App() {
               e.currentTarget.style.color = theme.text;
               e.currentTarget.style.textDecoration = 'none';
             }}>
-              <span>{user && user.name ? user.name : 'yahia'} 🔥</span>
+              <span>User Name</span>
             </h3>
             
             {/* Level Indicator */}
@@ -1814,7 +1743,27 @@ function App() {
 
           {/* Theme Toggle */}
           <div style={{ marginTop: '30px' }}>
-            <ThemeToggle darkMode={darkMode} setDarkMode={setDarkMode} theme={theme} />
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                backgroundColor: darkMode ? '#fbbc04' : '#1a73e8',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '500',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
+              }}
+            >
+              {darkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+            </button>
           </div>
 
           {/* Logout */}
@@ -1947,9 +1896,6 @@ function App() {
                 onBlur={(e) => e.target.style.borderColor = theme.border}
               />
             </div>
-
-            {/* Theme Toggle */}
-            <ThemeToggle darkMode={darkMode} setDarkMode={setDarkMode} theme={theme} />
           </div>
         </div>
       
