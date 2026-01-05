@@ -26,7 +26,7 @@ import {
 // Note: dnd-kit CSS styles are handled inline
 
 // Theme Toggle Component
-const ThemeToggle = ({ darkMode, setDarkMode, theme }) => {
+const ThemeToggle = ({ darkMode, setDarkMode, theme, position = 'header' }) => {
   const handleThemeToggle = () => {
     const newTheme = !darkMode;
     setDarkMode(newTheme);
@@ -43,33 +43,48 @@ const ThemeToggle = ({ darkMode, setDarkMode, theme }) => {
     <button
       onClick={handleThemeToggle}
       style={{
-        backgroundColor: 'transparent',
-        border: `1px solid ${theme.border}`,
+        backgroundColor: position === 'next-to-name' ? '#FF6B35' : 'transparent',
+        border: position === 'next-to-name' ? '2px solid #FF6B35' : `1px solid ${theme.border}`,
         borderRadius: '8px',
-        padding: '8px 12px',
+        padding: position === 'next-to-name' ? '6px 10px' : '8px 12px',
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
-        gap: '6px',
-        fontSize: '14px',
-        color: theme.text,
+        gap: '4px',
+        fontSize: position === 'next-to-name' ? '16px' : '14px',
+        color: position === 'next-to-name' ? 'white' : '#FF6B35',
         transition: 'all 0.2s ease',
-        fontWeight: '500'
+        fontWeight: '600',
+        zIndex: 9999,
+        position: 'relative',
+        boxShadow: position === 'next-to-name' ? '0 2px 8px rgba(255, 107, 53, 0.4)' : 'none'
       }}
       onMouseEnter={(e) => {
-        e.target.style.backgroundColor = theme.hoverBg;
-        e.target.style.transform = 'scale(1.05)';
+        if (position === 'next-to-name') {
+          e.target.style.backgroundColor = '#FF5722';
+          e.target.style.transform = 'scale(1.1)';
+        } else {
+          e.target.style.backgroundColor = theme.hoverBg;
+          e.target.style.transform = 'scale(1.05)';
+        }
       }}
       onMouseLeave={(e) => {
-        e.target.style.backgroundColor = 'transparent';
-        e.target.style.transform = 'scale(1)';
+        if (position === 'next-to-name') {
+          e.target.style.backgroundColor = '#FF6B35';
+          e.target.style.transform = 'scale(1)';
+        } else {
+          e.target.style.backgroundColor = 'transparent';
+          e.target.style.transform = 'scale(1)';
+        }
       }}
       title={`Switch to ${darkMode ? 'light' : 'dark'} mode`}
     >
       {darkMode ? '☀️' : '🌙'}
-      <span style={{ fontSize: '12px' }}>
-        {darkMode ? 'Light' : 'Dark'}
-      </span>
+      {position !== 'next-to-name' && (
+        <span style={{ fontSize: '12px' }}>
+          {darkMode ? 'Light' : 'Dark'}
+        </span>
+      )}
     </button>
   );
 };
@@ -1350,31 +1365,37 @@ function App() {
               📷
             </div>
             </div>
-            <h3 style={{ 
-              color: theme.text, 
-              margin: '0 0 5px 0', 
-              fontSize: '1.1rem',
-              fontWeight: '600',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
+            <div style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '8px'
-            }}
-            onClick={() => setShowProfileSettings(true)}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = '#1a73e8';
-              e.currentTarget.style.textDecoration = 'underline';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = theme.text;
-              e.currentTarget.style.textDecoration = 'none';
+              gap: '8px',
+              marginBottom: '10px'
             }}>
-              <span>{user && user.name ? user.name : 'yahia'} 🔥</span>
-            </h3>
-            
-            {/* Level Indicator */}
+              <h3 style={{ 
+                color: theme.text, 
+                margin: '0', 
+                fontSize: '1.1rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}
+              onClick={() => setShowProfileSettings(true)}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#1a73e8';
+                e.currentTarget.style.textDecoration = 'underline';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = theme.text;
+                e.currentTarget.style.textDecoration = 'none';
+              }}>
+                <span>{user && user.name ? user.name : 'yahia'} 🔥</span>
+              </h3>
+              <ThemeToggle darkMode={darkMode} setDarkMode={setDarkMode} theme={theme} position="next-to-name" />
+            </div>
             <div style={{
               display: 'flex',
               alignItems: 'center',
