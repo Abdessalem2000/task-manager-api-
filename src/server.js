@@ -24,6 +24,19 @@ if (missingVars.length > 0) {
 console.log('🔐 JWT_SECRET_KEY:', process.env.JWT_SECRET_KEY ? 'SET' : 'MISSING');
 console.log('🔗 MONGO_URI length:', process.env.MONGO_URI ? process.env.MONGO_URI.length : 0);
 
+// Detailed MONGO_URI analysis
+if (process.env.MONGO_URI) {
+  console.log('🔗 MONGO_URI first 50 chars:', process.env.MONGO_URI.substring(0, 50));
+  console.log('🔗 MONGO_URI contains srv:', process.env.MONGO_URI.includes('mongodb+srv'));
+  console.log('🔗 MONGO_URI contains @:', process.env.MONGO_URI.includes('@'));
+  console.log('🔗 MONGO_URI contains cluster:', process.env.MONGO_URI.includes('mongodb.net'));
+  
+  // Extract database name
+  const uriParts = process.env.MONGO_URI.split('/');
+  const dbName = uriParts[uriParts.length - 1];
+  console.log('🔗 Database name from URI:', dbName);
+}
+
 console.log('🚀 Server starting...');
 console.log('🔧 Environment:', process.env.NODE_ENV || 'development');
 console.log('🔗 Database URL:', process.env.MONGO_URI ? '✅ Configured' : '❌ Missing');

@@ -8,22 +8,38 @@ router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
+    console.log('🔐 Registration attempt for:', email);
+    console.log('🔐 DB connection state before register:', mongoose.connection.readyState);
+    
     const existingUser = await User.findOne({ email });
     if (existingUser) {
+      console.log('❌ Email already registered:', email);
       return res.status(400).json({ msg: 'Email already registered' });
     }
 
     const user = await User.create({ name, email, password });
     const token = user.createJWT();
     
+    console.log('✅ Registration successful for:', email);
     res.status(201).json({ 
       msg: 'Registration successful', 
       token,
       user: { name: user.name, email: user.email }
     });
   } catch (error) {
-    console.error('REGISTER ERROR:', error);
-    res.status(500).json({ msg: error.message });
+    console.error('❌ REGISTER ERROR:', error.message);
+    console.error('❌ Full error:', error);
+    console.error('❌ Error code:', error.code);
+    console.error('❌ Error name:', error.name);
+    console.error('❌ DB connection state after error:', mongoose.connection.readyState);
+    
+    res.status(500).json({ 
+      msg: `Database connection failed: ${error.message}`,
+      error: error.message,
+      code: error.code || 'UNKNOWN_ERROR',
+      name: error.name || 'UNKNOWN_NAME',
+      connectionState: mongoose.connection.readyState
+    });
   }
 });
 
