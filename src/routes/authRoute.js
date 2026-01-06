@@ -30,25 +30,35 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    console.log(' Login attempt for:', email);
+    
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ msg: 'Invalid credentials' });
+      console.log(' User not found:', email);
+      return res.status(401).json({ msg: 'User not found - Invalid credentials' });
     }
 
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(401).json({ msg: 'Invalid credentials' });
+      console.log(' Wrong password for:', email);
+      return res.status(401).json({ msg: 'Wrong password - Invalid credentials' });
     }
 
     const token = user.createJWT();
+    console.log(' Login successful for:', email);
     res.status(200).json({ 
       msg: 'Login successful', 
       token,
       user: { name: user.name, email: user.email }
     });
   } catch (error) {
-    console.error('LOGIN ERROR:', error);
-    res.status(500).json({ msg: error.message });
+    console.error(' LOGIN ERROR:', error.message);
+    console.error(' Full error:', error);
+    res.status(500).json({ 
+      msg: `Database connection failed: ${error.message}`,
+      error: error.message,
+      code: error.code || 'UNKNOWN_ERROR'
+    });
   }
 });
 
