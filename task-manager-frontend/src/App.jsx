@@ -1364,7 +1364,7 @@ function App() {
                 user?.name?.charAt(0).toUpperCase() || 'U'
               )}
               <input
-                id="profile-upload"
+                id="profile-upload-app"
                 type="file"
                 accept="image/*"
                 style={{ display: 'none' }}
