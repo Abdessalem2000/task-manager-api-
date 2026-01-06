@@ -20,7 +20,7 @@ const Auth = ({ onAuthSuccess }) => {
     e.preventDefault();
     setIsLoading(true);
 
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    const API_URL = import.meta.env.VITE_API_URL || 'https://task-manager-api.vercel.app';
     const endpoint = isLogin ? '/api/v1/auth/login' : '/api/v1/auth/register';
     
     try {
@@ -92,6 +92,7 @@ const Auth = ({ onAuthSuccess }) => {
                 onChange={handleChange}
                 required={!isLogin}
                 placeholder="Enter your name"
+                id="auth-name-input"
                 style={{
                   width: '100%',
                   padding: '12px',
@@ -120,6 +121,7 @@ const Auth = ({ onAuthSuccess }) => {
               onChange={handleChange}
               required
               placeholder="Enter your email"
+              id="auth-email-input"
               style={{
                 width: '100%',
                 padding: '12px',
@@ -147,6 +149,7 @@ const Auth = ({ onAuthSuccess }) => {
               onChange={handleChange}
               required
               placeholder="Enter your password"
+              id="auth-password-input"
               style={{
                 width: '100%',
                 padding: '12px',
