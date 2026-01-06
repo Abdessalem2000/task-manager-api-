@@ -21,6 +21,9 @@ if (missingVars.length > 0) {
   process.exit(1);
 }
 
+console.log('🔐 JWT_SECRET_KEY:', process.env.JWT_SECRET_KEY ? 'SET' : 'MISSING');
+console.log('🔗 MONGO_URI length:', process.env.MONGO_URI ? process.env.MONGO_URI.length : 0);
+
 console.log('🚀 Server starting...');
 console.log('🔧 Environment:', process.env.NODE_ENV || 'development');
 console.log('🔗 Database URL:', process.env.MONGO_URI ? '✅ Configured' : '❌ Missing');
