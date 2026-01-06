@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 const User = require('../models/User'); // موديل User
 
 router.post('/register', async (req, res) => {
@@ -31,6 +32,7 @@ router.post('/login', async (req, res) => {
 
   try {
     console.log(' Login attempt for:', email);
+    console.log(' DB connection state before query:', mongoose.connection.readyState);
     
     const user = await User.findOne({ email });
     if (!user) {
@@ -54,10 +56,15 @@ router.post('/login', async (req, res) => {
   } catch (error) {
     console.error(' LOGIN ERROR:', error.message);
     console.error(' Full error:', error);
+    console.error(' Error code:', error.code);
+    console.error(' Error name:', error.name);
+    console.error(' DB connection state after error:', mongoose.connection.readyState);
     res.status(500).json({ 
       msg: `Database connection failed: ${error.message}`,
       error: error.message,
-      code: error.code || 'UNKNOWN_ERROR'
+      code: error.code || 'UNKNOWN_ERROR',
+      name: error.name || 'UNKNOWN_NAME',
+      connectionState: mongoose.connection.readyState
     });
   }
 });
