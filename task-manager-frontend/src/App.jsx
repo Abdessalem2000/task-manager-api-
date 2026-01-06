@@ -446,7 +446,7 @@ function App() {
     // ... (rest of the code remains the same)
     
     const token = localStorage.getItem('token');
-    const API_URL = import.meta.env.VITE_API_URL || 'https://task-manager-api.vercel.app';
+    const API_URL = 'https://task-management-api.vercel.app'; // HARDCODED TO FIX CONNECTION ISSUES
     
     // Only fetch if we have a valid API URL
     if (!API_URL || API_URL === 'http://localhost:3000') {
@@ -1091,7 +1091,7 @@ function App() {
     if (!task) return;
 
     const token = localStorage.getItem('token');
-    const API_URL = import.meta.env.VITE_API_URL || 'https://task-manager-api.vercel.app';
+    const API_URL = 'https://task-management-api.vercel.app'; // HARDCODED TO FIX CONNECTION ISSUES
     
     fetch(`${API_URL}/api/tasks/${taskId}`, {
       method: 'PUT',
@@ -1137,7 +1137,7 @@ function App() {
 
   const deleteTask = (taskId) => {
     const token = localStorage.getItem('token');
-    const API_URL = import.meta.env.VITE_API_URL || 'https://task-manager-api.vercel.app';
+    const API_URL = 'https://task-management-api.vercel.app'; // HARDCODED TO FIX CONNECTION ISSUES
     
     fetch(`${API_URL}/api/tasks/${taskId}`, {
       method: 'DELETE',
@@ -1163,7 +1163,7 @@ function App() {
 
     setIsAddingTask(true);
     const token = localStorage.getItem('token');
-    const API_URL = import.meta.env.VITE_API_URL || 'https://task-manager-api.vercel.app';
+    const API_URL = 'https://task-management-api.vercel.app'; // HARDCODED TO FIX CONNECTION ISSUES
     const taskData = {
       name: newTaskName,
       completed: false,

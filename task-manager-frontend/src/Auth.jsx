@@ -20,7 +20,7 @@ const Auth = ({ onAuthSuccess }) => {
     e.preventDefault();
     setIsLoading(true);
 
-    const API_URL = import.meta.env.VITE_API_URL || 'https://task-manager-api.vercel.app';
+    const API_URL = 'https://task-management-api.vercel.app'; // HARDCODED TO FIX CONNECTION ISSUES
     const endpoint = isLogin ? '/api/v1/auth/login' : '/api/v1/auth/register';
     const fullUrl = `${API_URL}${endpoint}`;
     
