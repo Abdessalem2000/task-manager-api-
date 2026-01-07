@@ -68,15 +68,20 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 // Connect to MongoDB and wait for connection before starting routes
-connectDB()
-  .then(() => {
-    console.log('✅ MongoDB connected successfully!');
-    console.log('🔗 Database connection confirmed, setting up routes...');
-    
-    // Routes - MOVED TO TOP: Must be before any other routes
-    app.use('/api/v1/auth', authRouter);
-    app.use('/api/v1/dashboard', dashboardRouter);
-    app.use('/api/v1/tasks', taskRouter);
+try {
+  await connectDB();
+  console.log('✅ MongoDB connected successfully!');
+  console.log('🔗 Database connection confirmed, setting up routes...');
+  
+  // Environment variable check (without logging actual URI for security)
+  if (!process.env.MONGO_URI) {
+    console.error('❌ MONGO_URI environment variable is not defined');
+  }
+  
+  // Routes - MOVED TO TOP: Must be before any other routes
+  app.use('/api/v1/auth', authRouter);
+  app.use('/api/v1/dashboard', dashboardRouter);
+  app.use('/api/v1/tasks', taskRouter);
 
     // Health check route
     app.get('/health', (req, res) => {
@@ -88,17 +93,14 @@ connectDB()
       });
     });
 
-    // Start server only after DB is connected
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-      console.log(`🔗 Health check: http://localhost:${PORT}/health`);
-    });
-  })
-  .catch(err => {
+    // Note: app.listen() removed for Vercel compatibility
+  // Vercel handles serverless execution automatically
+  } catch (err) {
     console.error('❌ MongoDB connection failed:', err);
-    process.exit(1);
-  });
+    console.error('❌ Error details:', err.message);
+    console.error('❌ Error code:', err.code);
+    // Don't exit on Vercel, just log the error
+  }
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -114,5 +116,5 @@ app.use((req, res) => {
   res.status(404).json({ msg: 'Route not found' });
 });
 
-// Export app for Vercel
+// Export app for Vercel - MUST be at very end
 module.exports = app;
