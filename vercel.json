@@ -1,1 +1,9 @@
-{"version": 2, "buildCommand": "npm run vercel-build", "outputDirectory": ".", "installCommand": "npm install", "framework": null, "rewrites": [{"source": "/(.*)", "destination": "/src/server.js"}]}
+{
+  "version": 2,
+  "builds": [
+    { "src": "src/server.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/src/server.js" }
+  ]
+}
