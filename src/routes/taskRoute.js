@@ -3,6 +3,20 @@ const router = express.Router();
 const auth = require('../middleware/authMiddleware');
 const Task = require('../models/Task');
 
+// Test route without auth
+router.get('/test', async (req, res) => {
+  try {
+    console.log(' Test route hit - returning sample tasks');
+    res.status(200).json([
+      { _id: '1', name: 'Test Task 1', completed: false, priority: 'medium', category: 'work' },
+      { _id: '2', name: 'Test Task 2', completed: true, priority: 'high', category: 'personal' }
+    ]);
+  } catch (err) {
+    console.error('Test route error:', err.message);
+    res.status(500).json({ msg: err.message });
+  }
+});
+
 // GET user's tasks
 router.get('/', auth, async (req, res) => {
   try {
