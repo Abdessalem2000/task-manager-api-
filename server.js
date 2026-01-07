@@ -118,7 +118,10 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 404 handler
+// 404 handler - MUST be after all routes
 app.use((req, res) => {
   res.status(404).json({ msg: 'Route not found' });
 });
+
+// Export app for Vercel
+module.exports = app;
