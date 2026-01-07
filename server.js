@@ -1,9 +1,9 @@
 require('dotenv').config();
 const express = require('express');
-const connectDB = require('./db');
-const authRouter = require('./routes/authRoute');
-const dashboardRouter = require('./routes/dashboardRoute');
-const taskRouter = require('./routes/taskRoute');
+const connectDB = require('./src/db');
+const authRouter = require('./src/routes/authRoute');
+const dashboardRouter = require('./src/routes/dashboardRoute');
+const taskRouter = require('./src/routes/taskRoute');
 
 const app = express();
 

@@ -16,7 +16,6 @@ const connectDB = async () => {
     const options = {
       serverSelectionTimeoutMS: 10000, // 10 seconds timeout
       socketTimeoutMS: 45000, // 45 seconds socket timeout
-      bufferMaxEntries: 0,
       bufferCommands: false,
       connectTimeoutMS: 10000, // 10 seconds connection timeout
       maxPoolSize: 1, // Limit pool size to prevent hanging
