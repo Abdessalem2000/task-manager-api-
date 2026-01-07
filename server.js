@@ -78,15 +78,6 @@ connectDB()
     app.use('/api/v1/dashboard', dashboardRouter);
     app.use('/api/v1/tasks', taskRouter); // FIXED: Changed from /api/tasks to /api/v1/tasks
 
-    // Test route
-    app.get('/test', (req, res) => {
-      res.json({ 
-        status: 'Server is running', 
-        timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV || 'development'
-      });
-    });
-
     // Health check route
     app.get('/health', (req, res) => {
       res.json({ 
