@@ -454,7 +454,7 @@ function App() {
       return;
     }
     
-    fetch(`${API_URL}/api/tasks`, {
+    fetch(`${API_URL}/api/v1/tasks`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -1093,7 +1093,7 @@ function App() {
     const token = localStorage.getItem('token');
     const API_URL = 'https://task-management-api.vercel.app'; // HARDCODED TO FIX CONNECTION ISSUES
     
-    fetch(`${API_URL}/api/tasks/${taskId}`, {
+    fetch(`${API_URL}/api/v1/tasks/${taskId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -1139,7 +1139,7 @@ function App() {
     const token = localStorage.getItem('token');
     const API_URL = 'https://task-management-api.vercel.app'; // HARDCODED TO FIX CONNECTION ISSUES
     
-    fetch(`${API_URL}/api/tasks/${taskId}`, {
+    fetch(`${API_URL}/api/v1/tasks/${taskId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -1171,7 +1171,7 @@ function App() {
       category: taskCategory
     };
     
-    fetch(`${API_URL}/api/tasks`, {
+    fetch(`${API_URL}/api/v1/tasks`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

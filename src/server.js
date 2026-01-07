@@ -46,7 +46,11 @@ app.use((req, res, next) => {
   const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : '*';
   const origin = req.headers.origin;
   
+  console.log('🌐 CORS: Request from origin:', origin);
+  console.log('🌐 CORS: Allowed origins:', allowedOrigins);
+  
   if (allowedOrigins !== '*' && !allowedOrigins.includes(origin)) {
+    console.log('❌ CORS: Blocked origin:', origin);
     return res.status(403).json({ msg: 'CORS policy violation' });
   }
   
@@ -57,6 +61,7 @@ app.use((req, res, next) => {
   if (req.method === 'OPTIONS') {
     return res.sendStatus(200);
   }
+  
   next();
 });
 
@@ -65,12 +70,13 @@ app.use(express.json());
 // Connect to MongoDB and wait for connection before starting routes
 connectDB()
   .then(() => {
-    console.log('🔗 Database connected, setting up routes...');
+    console.log('✅ MongoDB connected successfully!');
+    console.log('🔗 Database connection confirmed, setting up routes...');
     
-    // Routes
+    // Routes - FIXED: All routes should have consistent /api prefix
     app.use('/api/v1/auth', authRouter);
     app.use('/api/v1/dashboard', dashboardRouter);
-    app.use('/api/tasks', taskRouter);
+    app.use('/api/v1/tasks', taskRouter); // FIXED: Changed from /api/tasks to /api/v1/tasks
 
     // Test route
     app.get('/test', (req, res) => {
