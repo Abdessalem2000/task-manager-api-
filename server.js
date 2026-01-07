@@ -73,10 +73,10 @@ connectDB()
     console.log('✅ MongoDB connected successfully!');
     console.log('🔗 Database connection confirmed, setting up routes...');
     
-    // Routes - FIXED: All routes should have consistent /api prefix
+    // Routes - MOVED TO TOP: Must be before any other routes
     app.use('/api/v1/auth', authRouter);
     app.use('/api/v1/dashboard', dashboardRouter);
-    app.use('/api/v1/tasks', taskRouter); // FIXED: Changed from /api/tasks to /api/v1/tasks
+    app.use('/api/v1/tasks', taskRouter);
 
     // Health check route
     app.get('/health', (req, res) => {
