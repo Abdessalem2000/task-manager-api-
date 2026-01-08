@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -37,4 +37,4 @@ userSchema.methods.createJWT = function() {
     { expiresIn: '30d' }
   );
 };
-module.exports = mongoose.model('User', userSchema);
+export default mongoose.model('User', userSchema);
