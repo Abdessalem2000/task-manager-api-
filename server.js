@@ -7,6 +7,11 @@ const taskRouter = require('./src/routes/taskRoute');
 
 const app = express();
 
+// Simple health check at very top - no database dependency
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // Check required environment variables
 const requiredEnvVars = ['JWT_SECRET_KEY', 'MONGO_URI'];
 const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
@@ -69,6 +74,9 @@ app.use(express.json());
 
 // Connect to MongoDB and wait for connection before starting routes
 try {
+  console.log('🔗 Attempting to connect to MongoDB...');
+  console.log('🔗 MONGO_URI is', process.env.MONGO_URI ? 'SET' : 'NOT SET');
+  
   await connectDB();
   console.log('✅ MongoDB connected successfully!');
   console.log('🔗 Database connection confirmed, setting up routes...');
@@ -99,7 +107,24 @@ try {
     console.error('❌ MongoDB connection failed:', err);
     console.error('❌ Error details:', err.message);
     console.error('❌ Error code:', err.code);
+    console.error('❌ Error name:', err.name);
+    
+    // Specific MongoDB error handling
+    if (err.message.includes('Authentication failed')) {
+      console.error('❌ AUTHENTICATION ERROR - Check username/password in MONGO_URI');
+    }
+    if (err.code === 'ETIMEDOUT') {
+      console.error('❌ CONNECTION TIMEOUT - Check IP whitelist in MongoDB Atlas');
+    }
+    if (err.code === 'ENOTFOUND') {
+      console.error('❌ HOST NOT FOUND - Check MONGO_URI hostname');
+    }
+    if (err.code === 'ECONNREFUSED') {
+      console.error('❌ CONNECTION REFUSED - Check MongoDB Atlas cluster status');
+    }
+    
     // Don't exit on Vercel, just log the error
+    console.error('❌ Server will continue without database connection');
   }
 
 // Error handling middleware
