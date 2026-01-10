@@ -13,9 +13,13 @@ export default function handler(req, res) {
   // Handle POST requests for adding tasks
   if (req.method === 'POST') {
     try {
+      console.log('🔍 POST request received');
+      console.log('🔍 Request body:', req.body);
+      
       const { name, completed, priority, category } = req.body;
       
       if (!name || name.trim() === '') {
+        console.log('❌ Task name is missing or empty');
         return res.status(400).json({ 
           msg: 'Task name is required'
         });
@@ -31,12 +35,13 @@ export default function handler(req, res) {
         createdAt: new Date().toISOString()
       };
 
+      console.log('✅ Task created successfully:', task);
       res.status(201).json({ 
         msg: 'Task created successfully', 
         task: task
       });
     } catch (error) {
-      console.error('Error creating task:', error);
+      console.error('❌ Error creating task:', error);
       res.status(500).json({ 
         msg: 'Internal server error',
         error: error.message 
