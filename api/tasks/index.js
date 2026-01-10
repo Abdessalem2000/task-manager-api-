@@ -1,19 +1,14 @@
 export default function handler(req, res) {
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://task-manager-frontend-opal-nu.vercel.app"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET,POST,PUT,DELETE,OPTIONS"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Content-Type"
-  );
+  // Set CORS headers IMMEDIATELY for all requests
+  res.setHeader("Access-Control-Allow-Origin", "https://task-manager-frontend-opal-nu.vercel.app");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Max-Age", "86400");
 
+  // Handle OPTIONS preflight request immediately
   if (req.method === "OPTIONS") {
-    return res.status(200).end();
+    res.status(200).end();
+    return;
   }
 
   if (req.method === "GET") {
@@ -40,12 +35,14 @@ export default function handler(req, res) {
         console.log("PARSED BODY:", parsedBody);
       } catch (error) {
         console.log("JSON PARSE ERROR:", error);
-        return res.status(400).json({ error: "Invalid JSON" });
+        res.status(400).json({ error: "Invalid JSON" });
+        return;
       }
 
       if (!parsedBody?.name) {
         console.log("NAME MISSING");
-        return res.status(400).json({ error: "Name required" });
+        res.status(400).json({ error: "Name required" });
+        return;
       }
 
       const task = {
@@ -55,7 +52,8 @@ export default function handler(req, res) {
       };
 
       console.log("TASK CREATED:", task);
-      return res.status(201).json(task);
+      res.status(201).json(task);
+      return;
     });
     
     return;
