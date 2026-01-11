@@ -1,63 +1,51 @@
 export default function handler(req, res) {
-  // Set CORS headers IMMEDIATELY for all requests
-  res.setHeader("Access-Control-Allow-Origin", "https://task-manager-frontend-opal-nu.vercel.app");
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  res.setHeader("Access-Control-Max-Age", "86400");
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-  // Handle OPTIONS preflight request immediately
-  if (req.method === "OPTIONS") {
+  // Handle OPTIONS preflight
+  if (req.method === 'OPTIONS') {
     res.status(200).end();
     return;
   }
 
-  if (req.method === "GET") {
-    return res.status(200).json([
-      { _id: "1", name: "Sample Task", completed: false }
+  // Handle GET request
+  if (req.method === 'GET') {
+    res.status(200).json([
+      { _id: '1', name: 'Sample Task', completed: false }
     ]);
+    return;
   }
 
-  if (req.method === "POST") {
-    let body = '';
-    
-    // Parse the request body
-    req.on('data', chunk => {
-      body += chunk.toString();
-    });
-    
-    req.on('end', () => {
-      console.log("POST RECEIVED");
-      console.log("RAW BODY:", body);
+  // Handle POST request
+  if (req.method === 'POST') {
+    try {
+      // Vercel provides parsed body in req.body
+      const { name } = req.body || {};
       
-      let parsedBody;
-      try {
-        parsedBody = JSON.parse(body);
-        console.log("PARSED BODY:", parsedBody);
-      } catch (error) {
-        console.log("JSON PARSE ERROR:", error);
-        res.status(400).json({ error: "Invalid JSON" });
-        return;
-      }
-
-      if (!parsedBody?.name) {
-        console.log("NAME MISSING");
-        res.status(400).json({ error: "Name required" });
-        return;
+      if (!name || name.trim() === '') {
+        return res.status(400).json({ 
+          error: 'Task name is required' 
+        });
       }
 
       const task = {
         _id: Date.now().toString(),
-        name: parsedBody.name,
+        name: name.trim(),
         completed: false
       };
 
-      console.log("TASK CREATED:", task);
       res.status(201).json(task);
-      return;
-    });
-    
+    } catch (error) {
+      console.error('Error creating task:', error);
+      res.status(500).json({ 
+        error: 'Internal server error' 
+      });
+    }
     return;
   }
 
-  return res.status(405).end();
+  // Handle other methods
+  res.status(405).end();
 }
