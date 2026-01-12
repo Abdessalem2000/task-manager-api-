@@ -16,6 +16,8 @@ export default function handler(req, res) {
       
       const { name } = req.body || {};
       console.log('Extracted name:', name);
+      console.log('Full req.body:', JSON.stringify(req.body));
+      console.log('Extracted name:', name);
       
       if (!name || name.trim() === '') {
         console.log('Task name validation failed');
