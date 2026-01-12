@@ -1,5 +1,6 @@
 export default function handler(req, res) {
   // CORS headers at VERY TOP - first thing executed
+  // Vercel Authentication disabled - fresh deployment
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
